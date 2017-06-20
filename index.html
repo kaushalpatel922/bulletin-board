@@ -23,6 +23,8 @@
       },
       save() {
         this.setState({ editing: false })
+        var val = this.refs.newText.value
+        alert("later we: " + val);
       },
       remove() {
         this.setState({ editing: false })
@@ -30,7 +32,7 @@
       renderForm(){
         return (
           <div className="note">
-            <textarea></textarea>
+            <textarea ref="newText"></textarea>
             <button onClick={this.save}>SAVE</button>
           </div>
         )
@@ -56,8 +58,28 @@
       }
     })
 
+    var Board = React.createClass({
+      propTypes: {
+        count: function(props, propName) {
+          if(typeof props[propName] !== "number") {
+            return new Error("the count must be a number")
+          }
+          if(props[propName] > 50) {
+            return new Error("the count must be less than 50")
+          }
+        }
+      },
+      render() {
+        return (
+          <div className="board">
+            {this.props.count}
+          </div>
+        )
+      }
+    })
+
     ReactDOM.render(
-      <Note>Hello World</Note>,
+      <Board count = {51} />,
       document.getElementById('container')
     )
 

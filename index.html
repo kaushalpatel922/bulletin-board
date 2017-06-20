@@ -13,21 +13,51 @@
     <script type="text/babel">
 
     var Note = React.createClass({
-      render() {
+      getInitialState() {
+        return {
+          editing: false
+        }
+      },
+      edit() {
+        this.setState({ editing: true })
+      },
+      save() {
+        this.setState({ editing: false })
+      },
+      remove() {
+        this.setState({ editing: false })
+      },
+      renderForm(){
+        return (
+          <div className="note">
+            <textarea></textarea>
+            <button onClick={this.save}>SAVE</button>
+          </div>
+        )
+      },
+      renderNote() {
         return (
           <div className = "note">
-            <p></p>
+            <p>{this.props.children}</p>
             <span>
-              <button>EDIT</button>
-              <button>X</button>
+              <button onClick={this.edit}>EDIT</button>
+              <button onClick={this.remove}>X</button>
             </span>
           </div>
         )
+      },
+      render() {
+        // either display the Show Note or Edit Note
+        if(this.state.editing) {
+          return this.renderForm()
+        } else {
+          return this.renderNote()
+        }
       }
     })
 
     ReactDOM.render(
-      <Note></Note>,
+      <Note>Hello World</Note>,
       document.getElementById('container')
     )
 

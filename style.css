@@ -21,8 +21,8 @@ div.board {
 }
 
 div.note {
-  height: 150px;
-  width: 150px;
+  height: 170px;
+  width: 200px;
   background-color: yellow;
   margin: 5px 0;
   position: absolute;
@@ -37,7 +37,7 @@ div.note:active {
 
 div.note p {
   margin: 0;
-  font-size: 22px;
+  font-size: 17px;
   padding: 5px;
   font-family: "Shadows Into Light", Arial;
 }

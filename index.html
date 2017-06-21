@@ -5,6 +5,9 @@
     <script src="https://unpkg.com/react@15/dist/react.js"></script>
     <script src="https://unpkg.com/react-dom@15/dist/react-dom.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.34/browser.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fetch/1.0.0/fetch.js">
+        </script>
+        <script src="https://npmcdn.com/react-draggable"></script>
     <link rel="stylesheet" type="text/css" href="style.css">
     <title>React App</title>
   </head>
@@ -25,6 +28,15 @@
           top: this.randomBetween(0, window.innerHeight - 150, 'px')
         }
       },
+      componentDidUpdate() {
+        if(this.state.editing) {
+          this.refs.newText.focus()
+          this.refs.newText.select()
+        }
+      },
+      shouldComponentUpdate(nextProps, nextState) {
+        return this.props.children !== nextProps.children || this.state !== nextState
+      },
       randomBetween(x, y, s) {
         return (x + Math.ceil(Math.random() * (y-x))) + s
       },
@@ -42,7 +54,9 @@
         return (
           <div className="note"
               style = {this.style}>
-            <textarea ref="newText"></textarea>
+            <textarea ref="newText"
+                      defaultValue = {this.props.children}>
+            </textarea>
             <button onClick={this.save}>SAVE</button>
           </div>
         )
@@ -61,12 +75,10 @@
       },
       render() {
         // either display the Show Note or Edit Note
-        if(this.state.editing) {
-          return this.renderForm()
-        } else {
-          return this.renderNote()
-        }
-      }
+        return ( <ReactDraggable>
+        {(this.state.editing) ? this.renderForm() : this.renderNote()}
+        </ReactDraggable>
+      )}
     })
 
     var Board = React.createClass({
@@ -84,6 +96,21 @@
       getInitialState() {
         return {
           notes: []
+        }
+      },
+      componentWillMount(){
+        if (this.props.count) {
+          var url = `http://baconipsum.com/api/?type=all-meat&sentences=${this.props.count}`
+          fetch(url)
+            .then(results => results.json())
+            .then(array => array[0])
+            .then(text => text.split('. '))
+            .then(array => array.forEach(
+              sentence => this.add(sentence)
+            ))
+            .catch(function(err) {
+              console.log("was not able to connect to API", err)
+            })
         }
       },
       nextId() {

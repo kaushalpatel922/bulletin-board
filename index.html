@@ -61,25 +61,38 @@
     var Board = React.createClass({
       propTypes: {
         count: function(props, propName) {
-          if(typeof props[propName] !== "number") {
-            return new Error("the count must be a number")
-          }
-          if(props[propName] > 50) {
-            return new Error("the count must be less than 50")
-          }
+            if(typeof props[propName] !== "number") {
+                return new Error("the count must be a number")
+            }
+
+            if(props[propName] > 25) {
+                return new Error('the count must be less than 25')
+            }
+        }
+      },
+      getInitialState() {
+        return {
+          notes: [
+            'Call Bob',
+            'Email Jeff',
+            'Eat lunch'
+          ]
         }
       },
       render() {
         return (
           <div className="board">
-            {this.props.count}
+            {this.state.notes.map((note, i) => {
+              return <Note key = {i}>{note}</Note>
+            })}
           </div>
         )
       }
     })
 
+
     ReactDOM.render(
-      <Board count = {51} />,
+      <Board count={11}/>,
       document.getElementById('container')
     )
 

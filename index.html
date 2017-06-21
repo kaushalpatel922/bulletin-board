@@ -71,12 +71,22 @@
       },
       getInitialState() {
         return {
-          notes: [
-            {id: 0, note: 'Call Bob'},
-            {id: 1, note: 'Email Jeff'},
-            {id: 2, note: 'Eat lunch'}
-          ]
+          notes: []
         }
+      },
+      nextId() {
+        this.uniqueId = this.uniqueId || 0;
+        return this.uniqueId++
+      },
+      add(text) {
+        var notes = [
+          ...this.state.notes,
+          {
+            id: this.nextId(),
+            note: text
+          }
+        ]
+        this.setState({ notes })
       },
       update(newText, id) {
         var notes = this.state.notes.map(
@@ -89,12 +99,12 @@
               note: newText
             }
         )
-        this.setState({notes})
+        this.setState({ notes })
       },
       //take the id of the note to be removed
       remove(id) {
         var notes = this.state.notes.filter(note => note.id !== id)
-        this.setState({notes})
+        this.setState({ notes })
       },
       //returning note component
       eachNote(note) {
@@ -112,6 +122,7 @@
         return (
           <div className="board">
             {this.state.notes.map(this.eachNote)}
+            <button onClick={ () => this.add('New Note')}>+</button>
           </div>
         )
       }
